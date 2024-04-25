@@ -1,5 +1,7 @@
 package tea
 
+import "github.com/muesli/termenv"
+
 // WindowSizeMsg is used to report the terminal size. It's sent to Update once
 // initially and then on every terminal resize. Note that Windows does not
 // have support for reporting when resizes occur as it does not support the
@@ -199,4 +201,28 @@ func (p *Program) DisableMouseAllMotion() {
 // SetWindowTitle sets the terminal window title.
 func (p *Program) SetWindowTitle(title string) {
 	p.output.SetWindowTitle(title)
+}
+
+// SetBackgroundColor is a special command that tells the Bubble Tea program to
+// set background color of the terminal.
+//
+// This can be used in the Init function to set a different background color for
+// the program. The background color is reset to the original state when the
+// program exits.
+//
+// Example:
+//
+//	func (m model) Init() tea.Cmd {
+//	    return tea.Cmd(func() tea.Msg {
+//	        return tea.SetBackgroundColor(termenv.RGBColor("#eeeeee"))
+//	    })
+//	}
+func SetBackgroundColor(c termenv.Color) Msg {
+	return backgroundColorMsg{color: c}
+}
+
+// backgroundColorMsg is an internal message that signals to change the
+// background color. You can send a backgroundColorMsg with SetBackgroundColor.
+type backgroundColorMsg struct {
+	color termenv.Color
 }

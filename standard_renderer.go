@@ -54,6 +54,11 @@ type standardRenderer struct {
 
 	// lines explicitly set not to render
 	ignoreLines map[int]struct{}
+
+	// background color when renderer is created
+	defaultBackgroundColor termenv.Color
+	// flag if background color has been changed
+	backgroundColorChanged bool
 }
 
 // newRenderer creates a new renderer. Normally you'll want to initialize it
@@ -710,5 +715,22 @@ func Printf(template string, args ...interface{}) Cmd {
 		return printLineMessage{
 			messageBody: fmt.Sprintf(template, args...),
 		}
+	}
+}
+
+func (r *standardRenderer) setBackgroundColor(c termenv.Color) {
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+
+	r.backgroundColorChanged = true
+	r.out.SetBackgroundColor(c)
+}
+
+func (r *standardRenderer) resetBackgroundColor() {
+	r.mtx.Lock()
+	defer r.mtx.Unlock()
+
+	if r.backgroundColorChanged && r.defaultBackgroundColor.Sequence(true) != "" {
+		r.out.SetBackgroundColor(r.defaultBackgroundColor)
 	}
 }

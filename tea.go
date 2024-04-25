@@ -165,6 +165,9 @@ type Program struct {
 	// fps is the frames per second we should set on the renderer, if
 	// applicable,
 	fps int
+
+    // color to be used for background when program starts
+	backgroundColor termenv.Color
 }
 
 // Quit is a special command that tells the Bubble Tea program to exit.
@@ -355,6 +358,9 @@ func (p *Program) eventLoop(model Model, cmds chan Cmd) (Model, error) {
 			case hideCursorMsg:
 				p.renderer.hideCursor()
 
+			case backgroundColorMsg:
+				p.renderer.setBackgroundColor(msg.color)
+
 			case enableBracketedPasteMsg:
 				p.renderer.enableBracketedPaste()
 
@@ -510,6 +516,11 @@ func (p *Program) Run() (Model, error) {
 
 	// Start the renderer.
 	p.renderer.start()
+
+    // Set background color
+	if p.backgroundColor != nil {
+		p.renderer.setBackgroundColor(p.backgroundColor)
+	}
 
 	// Initialize the program.
 	model := p.initialModel

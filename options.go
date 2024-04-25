@@ -223,3 +223,19 @@ func WithFPS(fps int) ProgramOption {
 		p.fps = fps
 	}
 }
+
+// WithBackgroundColor sets the background color of a program.
+// The background color is automatically reset when the program exits.
+//
+// Example:
+//
+//	p := tea.NewProgram(Model{}, tea.WithBackgroundColor(termenv.RGBColor("#eeeeee")))
+//	if _, err := p.Run(); err != nil {
+//	    fmt.Println("Error running program:", err)
+//	    os.Exit(1)
+//	}
+func WithBackgroundColor(c termenv.Color) ProgramOption {
+	return func(p *Program) {
+		p.backgroundColor = c
+	}
+}
