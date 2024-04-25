@@ -1,5 +1,7 @@
 package tea
 
+import "github.com/muesli/termenv"
+
 type nilRenderer struct{}
 
 func (n nilRenderer) start()                     {}
@@ -22,3 +24,5 @@ func (n nilRenderer) disableBracketedPaste()     {}
 func (n nilRenderer) enableMouseSGRMode()        {}
 func (n nilRenderer) disableMouseSGRMode()       {}
 func (n nilRenderer) bracketedPasteActive() bool { return false }
+func (n nilRenderer) setBackgroundColor(c termenv.Color) {}
+func (n nilRenderer) resetBackgroundColor()              {}
