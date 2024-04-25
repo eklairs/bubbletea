@@ -76,6 +76,8 @@ func newRenderer(out *termenv.Output, useANSICompressor bool, fps int) renderer 
 		framerate:          time.Second / time.Duration(fps),
 		useANSICompressor:  useANSICompressor,
 		queuedMessageLines: []string{},
+        defaultBackgroundColor: out.BackgroundColor(),
+		backgroundColorChanged: false,
 	}
 	if r.useANSICompressor {
 		r.out = termenv.NewOutput(&compressor.Writer{Forward: out})
